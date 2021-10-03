@@ -219,3 +219,12 @@ request a peer (approximately once every second) to send its
 partner list. The rst k received responses are aggregated to
 create the k response degree (and k response partner list).
 
+
+# References
+
+1. Measurement and modeling of a large-scale overlay for multimedia streaming, L Vu et al., QShine, 2007, 106 citations (https://scholar.google.com/citations?view_op=view_citation&hl=en&user=DTm6snUAAAAJ&citation_for_view=DTm6snUAAAAJ:u-x6o8ySG0sC)
+2. Understanding overlay characteristics of a large-scale peer-to-peer IPTV system, L Vu et al., ACM TOMCCAP, 2010, 91 citations (https://scholar.google.com/citations?view_op=view_citation&hl=en&user=DTm6snUAAAAJ&citation_for_view=DTm6snUAAAAJ:qjMakFHDy7sC)
+3. Measurement of a large-scale overlay for multimedia streaming, L Vu et al., HPDC, 2007, 54 citations (https://scholar.google.com/citations?view_op=view_citation&hl=en&user=DTm6snUAAAAJ&citation_for_view=DTm6snUAAAAJ:9yKSN-GCB0IC)
+4. PPLive Crawler source code, http://dprg.cs.uiuc.edu/traces/download_details.php?details=4, L Vu, 1340 downloads
+5. PPLive Snapshot Operation trace, http://dprg.cs.uiuc.edu/traces/download_details.php?details=3, L Vu, 1306 downloads
+6. PPLive Partner trace, http://dprg.cs.uiuc.edu/traces/download_details.php?details=2, L Vu, 1158 downloads
