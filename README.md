@@ -52,67 +52,64 @@ Careful denition of measured metrics in order to derive unbiased results and dra
 
 # PPLive Crawler Design Principles
 
-1) PPLive Protocols: Although PPLive is not open-source,
+## PPLive Protocols
+
+Although PPLive is not opensource,
 a little of its internal design decisions are known. Each PPLive
 node executes two protocols, for (1) registration and harvesting
 of partners, and (2) p2p video distribution. A PPLive node
 maintains two kinds of partners: candidates and real
-partners. The latter type are used for exchanging video streams
-via T CP connections, while the former is used to replace real
+partners. The latter are used for exchanging video streams
+via TCP connections, while the former is used to replace real
 partners that have become unresponsive. For our study, we use
 a capability where a node can be queried for its candidate and
 real partner lists, and it returns this partner list in a message.
 One difculty is that it is not known whether this returned
 list is the full partner list, or a subset of it. Hence, we need
-to dene a notion of node degree and partner list that is
-generic and covers both possibilities - we will do so soon
+to define a notion of node degree and partner list that is
+generic and covers both possibilities as discussed below.
 
-Figure 1 shows the actions of a PPLive node to join
+![testing](https://github.com/lhvu2/pplive_crawler/blob/main/images/pplive_membership_prototol.png)
+
+The above figure shows the actions of a PPLive node to join
 the network: (1) retrieve a list of channels from channel
-management servers via HT T P; (2) for the interested overlay,
+management servers via HTTP; (2) for the interested overlay,
 retrieve a small set of member nodes from the membership
 servers via UDP; (3) use this seed partner list to harvest
 (learn about) other candidate partners by periodically probing
 existing partners (and sometimes membership servers) via
 UDP. If a PPLive node is inside NAT or rewalls, UDP in
-the above steps may be replaced by T CP
+the above steps may be replaced by TCP. Since PPLive a closed source system, to understand its protocols, we develop a multi-threading C/C++ program to work in socket level to communicate with PPLive membership server as well as peers in the same channels. The source code is available at [6].
 
-2) PPLive Overlay: We formally dene the PPLive overlay
-as a graph G = (V, E). Recall that each PPLive overlay
+## PPLive Overlay
+
+We formally dene the PPLive overlay as a graph G = (V, E). Recall that each PPLive overlay
 corresponds to an individual PPLive channel. Each node (or
-peer) is dened as a given < IP, port > tuple and belongs to
-V . Each partner (or neighbor) of this node, appearing in its
-partner list, then corresponds to an edge (or link) in E.
+peer) is dened as a given <IP, port> tuple and belongs to
+V. Each partner (or neighbor) of this node, appearing in its partner list, then corresponds to an edge (or link) in E.
 
-k response degree: We are interested only in the outdegree of a node in the overlay, and henceforth call this simply
-as degree. As discussed previously, we need to dene degree
-in a manner that is generic. The k response degree of a node is
-dened as the aggregated set of partners returned in the rst k
-responses from a node that is repeatedly (once a second) sent
-a query for its partner list. We use a default setting of k = 15,
-however we verify the generality of these results for smaller
-values of k as well (Section VI-B). Henceforth in this paper,
-the term node degree stands for k response degree.
+### k response degree
 
-3) Active Peer: The next challenge is to clearly dene when
-a peer is considered to be a part of a given overlay. This is
-complicated by the fact that a user may not be subscribed to
-a channel that the user's client machine is participating in.
-Further, some clients may be behind NATs or rewalls, and
-may not respond to a direct probe message.
-Given an overlay G and a peer v, v is considered to be an
-active peer in G if either v appears in the membership list
-for G at one of the membership servers, or v is present in the
-partner list of some other peer u that is also an active peer.
-Notice that the denition is recursive. Formally, we dene the
-predicate:
+We are interested only in the outdegree of a node in the overlay, and henceforth call this simply
+as degree. As discussed previously, we need to dene degree in a manner that is generic. The k response degree of a node is
+dened as the aggregated set of partners returned in the rst k responses from a node that is repeatedly (once a second) sent
+a query for its partner list. We use a default setting of k = 15, however we verify the generality of these results for smaller
+values of k as well (Section VI-B). Henceforth in this paper, the term node degree stands for k response degree.
+
+### Active Peer
+
+The next challenge is to clearly dene when a peer is considered to be a part of a given overlay. This is
+complicated by the fact that a user may not be subscribed to a channel that the user's client machine is participating in.
+Further, some clients may be behind NATs or rewalls, and may not respond to a direct probe message.
+Given an overlay G and a peer v, v is considered to be an active peer in G if either v appears in the membership list
+for G at one of the membership servers, or v is present in the partner list of some other peer u that is also an active peer.
+Notice that the denition is recursive. Formally, we define the predicate:
 
 ACTIVE(v, G) = {v ∈ Membership Server List for G} OR
 {∃u : ACTIVE(u, G) AND v ∈ u.P artnerList(G)}
-This denition is more inclusive than that in [15] because
-our denition also includes silent peers that may behind
-rewalls. Even though we have not described our crawler yet,
-we need to justify the above denition. We quickly present two simple experiments below to do so.
+
+Note that this denition includes silent peers that may behind
+firewalls and previous studies simply ignore these peers - that to our knowledge, is not correct. To justify the above denition, we quickly present two simple experiments below to do so.
 
 First, we measured the fraction of peers that were captured
 by our crawler (see Snapshot Operation in Section III) using
@@ -141,7 +138,7 @@ via HT T P; (2) for the interested overlay, retrieve a small set of member nodes
 seed partner list to harvest (learn about) other candidate partners by periodically probing existing partners (and sometimes membership
 servers) via UDP. If a PPLive node is inside NAT or firewalls, UDP in the above steps may be replaced by TCP.
 
-![testing](https://github.com/lhvu2/pplive_crawler/blob/main/images/pplive_membership_prototol.png)
+
 
 
 Snapshot Operation: We are interested in measuring the
