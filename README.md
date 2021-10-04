@@ -3,12 +3,13 @@
 PPLive is the largest chunk-driven multimedia streaming
 p2p overlay in the world. As of May 2006, PPLive had
 over 200 distinct online channels, a daily average of 400,000
-aggregated users, and most of its channels had several thousands of users at their peaks [2]. The system is increasing
+aggregated users, and most of its channels had several thousands of users at their peaks. The system was increasing
 in popularity, especially in China and Asia. For instance,
 during the Chinese New Year 2006 event, a particular PPLive
-channel had over 200,000 simultaneous viewers [15]. In our
+channel had over 200,000 simultaneous viewers. In our
 experiments during July 2006, we observed that there are about
-400 online channels on the English version page of PPLive.
+400 online channels on the English version page of PPLive. Understanding how a large deployed system like PPLive
+manages such a big network is essential for developing largescale IPTV applications in the future.
 
 PPLive streams live TV and video data through overlays of
 cooperative peers. The PPLive system has multiple channels,
@@ -19,68 +20,37 @@ machine, but the client machine could also be used to relay
 feeds for channels other than the subscribed one (by the
 PPLive protocol).
 
-Understanding how a large deployed system like PPLive
-manages such a big network is essential for developing largescale IPTV applications in the future. There are several measurement studies about PPLive characteristics [15][18].
-In these papers, authors focused on evaluating PPLive performance such as channel population, user arrivals and departures, user geographic distribution. They also evaluated
-video trafc, video TCP connections, and user-perceived quality. These studies concentrated on measurement rather than
-relationship between channel characteristics, user behavior,
-and overlay characteristics. Nevertheless, there is no research
-on how channel properties and user preference inuence the
-system overlay. Our study attempts to fill this gap
-
-PPLive is a free IPTV application which divides video
+PPLive divides video
 streams into chunks and distributes them via overlays of
-cooperative peers. The PPLive system consists of multiple
-overlays, with one overlay per channel. Each channel streams
+cooperative peers. Each channel streams
 either live content or a repeating prexed program, and the feed from the channel originates from a server. A user can join
 at most one channel. When she does so, her client machine is
 not only as a consumer of feeds from that channel, but may
 also be chosen by the protocol to act as a relay for feeds from
 other channels. By default, each PPLive client has a pair of
-T CP and UDP ports to communicate with PPLive servers
-and partners. A number of other T CP ports can be used by
+TCP and UDP ports to communicate with PPLive servers
+and partners. A number of other TCP ports can be used by
 the client to exchange video chunks during its sessions.
 
-The first challenge is that in PPLive, it is very difcult to
-distinguish between the notion of user and client machine.
-There are two main reasons for this: (1) PPLive users are free
+We face several challenges studying PPLive network since it is very difcult to
+distinguish between the notion of user and client machine when studying PPLive overlay networks.
+There are reasons for this: (1) PPLive users are free
 to join, leave, and switch channels by accessing the PPLive
 web interface or PPLive Net TV. (2) Due to NAT boxes and
-rewalls, a user's client machine may change its IP or UDP
+firewalls, a user's client machine may change its IP or UDP
 port number or both. (3) The proprietary PPLive system is
-rumored to use the idea of inter-overlay optimizations [19];
+rumored to use the idea of inter-overlay optimizations;
 as a result, a client machine may appear as a participant
 in multiple overlays, including ones that the user is not
-subscribed to.
-
-
-Results obtained from our experiments indicate that PPLive
-overlay characteristics differ from those of p2p le sharing.
-Our major ndings are that: (1) Unlike p2p le sharing users,
-PPLive peers are impatient, (2) Channel Size variations are
-larger than in p2p le sharing networks, (3) Average degree
-of a peer in the overlay (i.e., its out-degree) is independent
-of channel size, (4) Smaller PPLive overlays are similar to
-random graphs in structure, (5) The availability correlation
-between PPLive peer pairs is bimodal, i.e., some pairs have
-highly correlated availability, while others have no correlation.
-All the above conclusions, except (3), are markedly different
-from the well-known characteristics of p2p le sharing systems
-[6][4][5]
-
-Studying PPLive is challenging because (a) of its size and
+subscribed to. Moreover, studying PPLive is challenging because (a) of its size and
 dynamism of viewing content and user population, and (b)
 it is a proprietary protocol with few publicly known design
 decisions. As a result, our study follows two principles: I.
 Careful design and thorough validation of our crawler; II.
-Careful denition of measured metrics in order to derive unbiased results and draw correct conclusions. These are explained
-in more detailed in Sections II and III. Our hypotheses are
-validated by extensive experiments with data crawled during
-a period of 4 months, stretching from April 2006 until the end
-of July 2006.
+Careful denition of measured metrics in order to derive unbiased results and draw correct conclusions.
 
 
-# PPLive Crawler
+# PPLive Crawler Design Principles
 
 1) PPLive Protocols: Although PPLive is not open-source,
 a little of its internal design decisions are known. Each PPLive
@@ -218,6 +188,20 @@ Partner Discovery: The operation to obtain the k response degree of a node (Sect
 request a peer (approximately once every second) to send its
 partner list. The rst k received responses are aggregated to
 create the k response degree (and k response partner list).
+
+Results obtained from our experiments indicate that PPLive
+overlay characteristics differ from those of p2p le sharing.
+Our major ndings are that: (1) Unlike p2p le sharing users,
+PPLive peers are impatient, (2) Channel Size variations are
+larger than in p2p le sharing networks, (3) Average degree
+of a peer in the overlay (i.e., its out-degree) is independent
+of channel size, (4) Smaller PPLive overlays are similar to
+random graphs in structure, (5) The availability correlation
+between PPLive peer pairs is bimodal, i.e., some pairs have
+highly correlated availability, while others have no correlation.
+All the above conclusions, except (3), are markedly different
+from the well-known characteristics of p2p le sharing systems
+[6][4][5]
 
 
 # References
